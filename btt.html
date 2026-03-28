@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="vi">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Trang thành viên - Pastel Pink</title>
+
+	<style>
+		/* =========================================================
+		   RESET + BIẾN MÀU (tông pastel hồng)
+		   - Bạn có thể đổi màu nhanh tại đây
+		   ========================================================= */
+		:root{
+			--pink-1: #ff9a9e;     /* gradient start (Banner) */
+			--pink-2: #fad0c4;     /* gradient end (Banner)   */
+
+			--card-bg: #ffe0ec;    /* màu nền thẻ tròn */
+			--card-border: #ffc8d8;/* viền pastel */
+			--text: #3d2b2f;       /* màu chữ chính */
+			--muted: #7a5a63;      /* chữ phụ */
+			--white: #ffffff;
+
+			--shadow: 0 12px 30px rgba(255, 154, 158, 0.25);
+			--radius: 18px;
+		}
+
+		*{ box-sizing: border-box; }
+		body{
+			margin: 0;
+			font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+			color: var(--text);
+			background: linear-gradient(180deg, rgba(255,224,236,0.35), rgba(255,255,255,1) 50%);
+		}
+		a{ color: inherit; }
+		img{ max-width: 100%; display: block; }
+
+		.container{
+			width: min(1100px, calc(100% - 32px));
+			margin: 0 auto;
+		}
+
+		/* =========================================================
+		   BANNER
+		   - Gradient #ff9a9e → #fad0c4
+		   - Chữ trắng nổi bật
+		   ========================================================= */
+		.banner{
+			background: linear-gradient(90deg, var(--pink-1), var(--pink-2));
+			color: var(--white);
+			padding: 44px 0;
+		}
+		.banner h1{
+			margin: 0 0 8px 0;
+			font-size: clamp(26px, 4vw, 38px);
+			letter-spacing: 0.2px;
+		}
+		.banner p{
+			margin: 0;
+			opacity: 0.95;
+			line-height: 1.5;
+			max-width: 70ch;
+		}
+
+		/* =========================================================
+		   MENU (2 tab)
+		   - Giới thiệu / Liên hệ
+		   - Tab nào active thì chỉ hiện phần đó
+		   ========================================================= */
+		.nav{
+			position: sticky;
+			top: 0;
+			z-index: 5;
+			background: rgba(255,255,255,0.78);
+			backdrop-filter: blur(10px);
+			border-bottom: 1px solid rgba(255, 200, 216, 0.6);
+		}
+		.nav-inner{
+			display: flex;
+			gap: 10px;
+			align-items: center;
+			justify-content: center;
+			padding: 12px 0;
+		}
+		.tab-btn{
+			border: 1px solid rgba(255, 200, 216, 0.9);
+			background: #fff;
+			color: var(--text);
+			padding: 10px 14px;
+			border-radius: 999px;
+			cursor: pointer;
+			font-weight: 600;
+			transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+		}
+		.tab-btn:hover{
+			transform: translateY(-1px);
+			box-shadow: 0 10px 20px rgba(255, 154, 158, 0.16);
+		}
+		.tab-btn.active{
+			background: var(--card-bg);
+			box-shadow: 0 10px 20px rgba(255, 154, 158, 0.18);
+		}
+
+		/* =========================================================
+		   SECTION CHUNG
+		   ========================================================= */
+		section{
+			padding: 34px 0 56px;
+		}
+		.section-title{
+			margin: 0 0 8px 0;
+			font-size: 24px;
+		}
+		.section-desc{
+			margin: 0 0 22px 0;
+			color: var(--muted);
+			line-height: 1.6;
+		}
+
+		/* =========================================================
+		   PHẦN GIỚI THIỆU - 12 THẺ THÀNH VIÊN (circle card)
+		   - Thẻ tròn màu #ffe0ec, viền #ffc8d8
+		   - Hover scale 1.07
+		   - Avatar tròn "ngoài thẻ" (nổi lên phía trên)
+		   ========================================================= */
+		.cards{
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 18px;
+		}
+		@media (max-width: 950px){
+			.cards{ grid-template-columns: repeat(3, 1fr); }
+		}
+		@media (max-width: 700px){
+			.cards{ grid-template-columns: repeat(2, 1fr); }
+		}
+		@media (max-width: 420px){
+			.cards{ grid-template-columns: 1fr; }
+		}
+
+		.member-card{
+			position: relative;
+			border-radius: 999px;              /* thẻ tròn */
+			background: var(--card-bg);
+			border: 2px solid var(--card-border);
+			padding: 38px 18px 18px;
+			text-align: center;
+			cursor: pointer;
+			box-shadow: 0 10px 22px rgba(255, 154, 158, 0.12);
+			transition: transform .16s ease, box-shadow .16s ease;
+			min-height: 210px;
+			display: grid;
+			align-content: start;
+			gap: 8px;
+		}
+		.member-card:hover{
+			transform: scale(1.07);
+			box-shadow: var(--shadow);
+		}
+
+		/* Avatar nằm "ngoài thẻ" (nổi lên phía trên) */
+		.avatar-wrap{
+			position: absolute;
+			top: -26px;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 72px;
+			height: 72px;
+			border-radius: 50%;
+			border: 3px solid var(--card-border);
+			background: #fff;
+			padding: 3px;
+			box-shadow: 0 10px 18px rgba(255, 154, 158, 0.18);
+		}
+		.avatar-wrap img{
+			width: 100%;
+			height: 100%;
+			border-radius: 50%;
+			object-fit: cover;
+		}
+		.member-name{
+			margin-top: 22px; /* chừa khoảng cho avatar nổi */
+			font-weight: 800;
+			font-size: 16px;
+		}
+		.member-role{
+			color: var(--muted);
+			font-size: 13px;
+			font-weight: 600;
+		}
+		.member-hobby{
+			font-size: 13px;
+			line-height: 1.35;
+		}
+
+		/* =========================================================
+		   POPUP (Modal)
+		   - Ảnh popup bo góc + viền pastel
+		   - Nút đóng dạng tròn màu hồng
+		   ========================================================= */
+		.modal{
+			position: fixed;
+			inset: 0;
+			display: none; /* JS sẽ bật/tắt */
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
+			background: rgba(25, 10, 15, 0.45);
+			z-index: 50;
+		}
+		.modal.show{ display: flex; }
+
+		.modal-card{
+			width: min(860px, 100%);
+			background: #fff;
+			border-radius: 22px;
+			border: 2px solid rgba(255, 200, 216, 0.85);
+			box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+			overflow: hidden;
+			position: relative;
+		}
+		.modal-close{
+			position: absolute;
+			top: 12px;
+			right: 12px;
+			width: 38px;
+			height: 38px;
+			border-radius: 999px;
+			border: 0;
+			cursor: pointer;
+			background: #ff6b95; /* nút đóng tròn màu hồng */
+			color: #fff;
+			font-size: 20px;
+			line-height: 1;
+			box-shadow: 0 10px 22px rgba(255, 107, 149, 0.35);
+		}
+		.modal-body{
+			display: grid;
+			grid-template-columns: 1.1fr 0.9fr;
+			gap: 18px;
+			padding: 18px;
+		}
+		@media (max-width: 820px){
+			.modal-body{ grid-template-columns: 1fr; }
+		}
+
+		.modal-img{
+			border-radius: var(--radius);
+			border: 2px solid var(--card-border); /* viền pastel */
+			overflow: hidden;
+			background: #fff;
+		}
+		.modal-img img{
+			width: 100%;
+			height: 100%;
+			max-height: 420px;
+			object-fit: cover;
+		}
+		.modal-info{
+			padding: 8px 8px 12px;
+			display: grid;
+			gap: 8px;
+			align-content: start;
+		}
+		.modal-info h3{
+			margin: 0;
+			font-size: 22px;
+		}
+		.modal-info .role{
+			margin: 0;
+			color: var(--muted);
+			font-weight: 700;
+		}
+		.modal-info .hobby{
+			margin: 0;
+			line-height: 1.6;
+		}
+
+		/* =========================================================
+		   PHẦN LIÊN HỆ
+		   - Giữ mô tả liên hệ
+		   - Form: Họ tên, Email, Nội dung
+		   - Nút dẫn Google Form
+		   ========================================================= */
+		.contact-wrap{
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 18px;
+			align-items: start;
+		}
+		@media (max-width: 900px){
+			.contact-wrap{ grid-template-columns: 1fr; }
+		}
+
+		.card-box{
+			background: #fff;
+			border: 2px solid rgba(255, 200, 216, 0.7);
+			border-radius: 18px;
+			padding: 18px;
+			box-shadow: 0 12px 26px rgba(255, 154, 158, 0.10);
+		}
+
+		.form{
+			display: grid;
+			gap: 12px;
+		}
+		label{
+			font-weight: 700;
+			font-size: 13px;
+		}
+		input, textarea{
+			width: 100%;
+			padding: 11px 12px;
+			border-radius: 12px;
+			border: 1.6px solid rgba(255, 200, 216, 0.95);
+			outline: none;
+			font: inherit;
+			background: #fff;
+		}
+		input:focus, textarea:focus{
+			box-shadow: 0 0 0 4px rgba(255, 154, 158, 0.18);
+		}
+		textarea{ min-height: 120px; resize: vertical; }
+
+		.btn-row{
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+			margin-top: 4px;
+		}
+		.btn{
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			padding: 10px 14px;
+			border-radius: 999px;
+			border: 0;
+			cursor: pointer;
+			font-weight: 800;
+			text-decoration: none;
+			transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+		}
+		.btn:hover{
+			transform: translateY(-1px);
+			box-shadow: 0 14px 26px rgba(255, 154, 158, 0.18);
+		}
+		.btn-primary{
+			background: linear-gradient(90deg, var(--pink-1), var(--pink-2));
+			color: #fff;
+		}
+		.btn-outline{
+			background: #fff;
+			border: 2px solid rgba(255, 200, 216, 0.95);
+			color: var(--text);
+		}
+
+		/* =========================================================
+		   TAB CONTENT (JS sẽ ẩn/hiện)
+		   ========================================================= */
+		.tab-content{ display: none; }
+		.tab-content.active{ display: block; }
+
+		footer{
+			padding: 18px 0 28px;
+			color: var(--muted);
+			text-align: center;
+			font-size: 13px;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- =========================================================
+	     BANNER
+	     (Bạn có thể sửa tiêu đề / mô tả ở đây)
+	     ========================================================= -->
+	<header class="banner">
+		<div class="container">
+			<h1>NHÓM 1 ĐỨA CHỘT ĐỨA QUÈ</h1>
+			<p>CHƯA BIẾT VIẾT GÌ:))</p>
+		</div>
+	</header>
+
+	<!-- =========================================================
+	     MENU (2 tab)
+	     - Bấm tab nào chỉ hiện tab đó (JS nhẹ)
+	     ========================================================= -->
+	<nav class="nav" aria-label="Menu tab">
+		<div class="container nav-inner">
+			<button class="tab-btn active" data-tab="about" type="button">Giới thiệu</button>
+			<button class="tab-btn" data-tab="contact" type="button">Liên hệ</button>
+		</div>
+	</nav>
+
+	<main class="container">
+		<!-- =========================================================
+		     PHẦN GIỚI THIỆU
+		     ========================================================= -->
+		<section id="tab-about" class="tab-content active">
+			<h2 class="section-title">Giới thiệu</h2>
+			<p class="section-desc">
+				DANH TÍNH THỦ PHẠM
+			</p>
+
+			<!-- =========================================================
+			     12 THẺ THÀNH VIÊN (circle card)
+			     - Mỗi thẻ chứa data-* để JS lấy dữ liệu hiển thị popup
+			     - Bạn chỉ cần thay link ảnh / tên / chức vụ / sở thích trong từng thẻ
+			     ========================================================= -->
+			<div class="cards" id="memberGrid">
+
+				<!-- THÀNH VIÊN 1 -->
+				<!-- THAY LINK ẢNH AVATAR -->
+				<!-- THAY LINK ẢNH POPUP -->
+				<!-- THAY TÊN THÀNH VIÊN -->
+				<!-- THAY CHỨC VỤ -->
+				<!-- THAY SỞ THÍCH -->
+				<article class="member-card"
+					data-name="Thành viên 1"
+					data-role="Lê Văn Bình"
+					data-hobby="Sở thích: Âm nhạc, đọc sách"
+					data-popup="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80"
+					tabindex="0"
+					role="button"
+					aria-label="Mở thông tin Thành viên 1">
+					<div class="avatar-wrap">
+						<img src="https://i.ibb.co/r2FNBTxX/pfp.jpg?auto=format&fit=crop&w=300&q=80" alt="Avatar thành viên 1">
+					</div>
+					<div class="member-name">09. LVB</div>
+				</article>
+
+				<!-- THÀNH VIÊN 2 -->
+				<!-- THAY LINK ẢNH AVATAR -->
+				<!-- THAY LINK ẢNH POPUP -->
+				<!-- THAY TÊN THÀNH VIÊN -->
+				<!-- THAY CHỨC VỤ -->
+				<!-- THAY SỞ THÍCH -->
+				<article class="member-card"
+					data-name="Thành viên 2"
+					data-role="Khương Hữu Công"
+					data-hobby="Sở thích: Chụp ảnh, du lịch"
+					data-popup="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80"
+					tabindex="0"
+					role="button"
+					aria-label="Mở thông tin Thành viên 2">
+					<div class="avatar-wrap">
+						<img src="https://i.ibb.co/WWR7Txyj/Muhchche.jpg?auto=format&fit=crop&w=300&q=80" alt="Avatar thành viên 2">
+					</div>
+					<div class="member-name">14. KHC</div>
+				</article>
+
+				<!-- THÀNH VIÊN 3 -->
+				<!-- THAY LINK ẢNH AVATAR -->
+				<!-- THAY LINK ẢNH POPUP -->
+				<!-- THAY TÊN THÀNH VIÊN -->
+				<!-- THAY CHỨC VỤ -->
+				<!-- THAY SỞ THÍCH -->
+				<article class="member-card"
+					data-name="Thành viên 3"
+					data-role="Nguyễn Quang Đông"
+					data-hobby="Sở thích: Nấu ăn, thể thao"
+					data-popup="https://images.unsplash.com/photo-1524502397800-2eeaad7c3fe5?auto=format&fit=crop&w=1200&q=80"
+					tabindex="0"
+					role="button"
+					aria-label="Mở thông tin Thành viên 3">
+					<div class="avatar-wrap">
+						<img src="https://i.ibb.co/FpHdQ4J/z7668251217620-dbca026f316b2ddf873d663ccffa267a.jpg?auto=format&fit=crop&w=300&q=80" alt="Avatar thành viên 3">
+					</div>
+					<div class="member-name">16. NQĐ</div>
+				</article>
+
+				<!-- THÀNH VIÊN 4 -->
+				<!-- THAY LINK ẢNH AVATAR -->
+				<!-- THAY LINK ẢNH POPUP -->
+				<!-- THAY TÊN THÀNH VIÊN -->
+				<!-- THAY CHỨC VỤ -->
+				<!-- THAY SỞ THÍCH -->
+				<article class="member-card"
+					data-name="thành viên 4"
+					data-role="Nguyễn Minh Hà"
+					data-hobby="Sở thích: Vẽ, nghe nhạc"
+					data-popup="https://i.ibb.co/p6fSQZhd/z7668115602144-cdc2dfa1a7226653da28d7d52d28f927.jpg?auto=format&fit=crop&w=1200&q=80"
+					tabindex="0"
+					role="button"
+					aria-label="Mở thông tin Thành viên 4">
+					<div class="avatar-wrap">
+						<img src="https://i.ibb.co/ZR7tTDYG/z7668285715844-bb79241c5c59c5e8e2ecf9c1ba2cd50a.jpg?auto=format&fit=crop&w=300&q=80" alt="Avatar thành viên 4">
+					</div>
+					<div class="member-name">19. NMH</div>
+				</article>
+
+				<!-- THÀNH VIÊN 5 -->
+				<!-- THAY LINK ẢNH AVATAR -->
+				<!-- THAY LINK ẢNH POPUP -->
+				<!-- THAY TÊN THÀNH VIÊN -->
+				<!-- THAY CHỨC VỤ -->
+				<!-- THAY SỞ THÍCH -->
+				<article class="member-card"
+					data-name="Thành viên 5"
+					data-role="Vương Nguyên Khôi"
+					data-hobby="Sở thích: Cắm hoa, cà phê"
+					data-popup="https://images.unsplash.com/photo-1524502583807-8aa7b45c7b26?auto=format&fit=crop&w=1200&q=80"
+					tabindex="0"
+					role="button"
+					aria-label="Mở thông tin Thành viên 5">
+					<div class="avatar-wrap">
+						<img src="https://i.ibb.co/twNx8TZv/dae2ef098849dd7e1393c38920ef1905.jpg?auto=format&fit=crop&w=300&q=80" alt="Avatar thành viên 5">
+					</div>
+					<div class="member-name">23. VNK</div>
+				</article>
+
+				<!-- THÀNH VIÊN 6 -->
+				<!-- THAY LINK ẢNH AVATAR -->
+				<!-- THAY LINK ẢNH POPUP -->
+				<!-- THAY TÊN THÀNH VIÊN -->
+				<!-- THAY CHỨC VỤ -->
+				<!-- THAY SỞ THÍCH -->
+				<article class="member-card"
+					data-name="Thành viên 6"
+					data-role="Kiều Tuyết Mai"
+					data-hobby="Sở thích: Học ngoại ngữ, viết lách"
+					data-popup="https://i.ibb.co/HfDjfqB8/z7664927163571-528cbfa79504f49adf0946daf7e642c1.jpg?auto=format&fit=crop&w=1200&q=80"
+					tabindex="0"
+					role="button"
+					aria-label="Mở thông tin Thành viên 6">
+					<div class="avatar-wrap">
+						<img src="https://i.ibb.co/84s9C6yd/z7668269321068-0160c77570c6417f34db67f6ff467c8e.jpg?auto=format&fit=crop&w=300&q=80" alt="Avatar thành viên 6">
+					</div>
+					<div class="member-name">27. KTM</div>
+				</article>
+
+				<!-- THÀNH VIÊN 7 -->
+				<!-- THAY LINK ẢNH AVATAR -->
+				<!-- THAY LINK ẢNH POPUP -->
+				<!-- THAY TÊN THÀNH VIÊN -->
+				<!-- THAY CHỨC VỤ -->
+				<!-- THAY SỞ THÍCH -->
+				<article class="member-card"
+					data-name="Thành viên 7"
+					data-role="Nguyễn Thọ Tiến Minh"
+					data-hobby="Sở thích: Chơi game, công nghệ"
+					data-popup="https://i.ibb.co/23hgkK9Q/z7668115610007-433b190e83c79fc76bb3e76a400f9d5e.jpg?auto=format&fit=crop&w=1200&q=80"
+					tabindex="0"
+					role="button"
+					aria-label="Mở thông tin Thành viên 7">
+					<div class="avatar-wrap">
+						<img src="https://i.ibb.co/V008fkT8/z7668115600674-434e688d69817f64a745534aa59c952f.jpg?auto=format&fit=crop&w=300&q=80" alt="Avatar thành viên 7">
+					</div>
+					<div class="member-name">31. NTTM</div>
+					</article>
+
+				<!-- THÀNH VIÊN 8 -->
+				<!-- THAY LINK ẢNH AVATAR -->
+				<!-- THAY LINK ẢNH POPUP -->
+				<!-- THAY TÊN THÀNH VIÊN -->
+				<!-- THAY CHỨC VỤ -->
+				<!-- THAY SỞ THÍCH -->
+				<article class="member-card"
+					data-name="Thành viên 8"
+					data-role="Nguyễn Minh Phương"
+					data-hobby="Sở thích: điếm tiền, hít mèo"
+					data-popup="https://i.ibb.co/PvK9tp7W/z7668349190634-abf1c5991462e1200342356db3c0e990.jpg?auto=format&fit=crop&w=1200&q=80"
+					tabindex="0"
+					role="button"
+					aria-label="Mở thông tin Thành viên 8">
+					<div class="avatar-wrap">
+						<img src="https://i.ibb.co/PvK9tp7W/z7668349190634-abf1c5991462e1200342356db3c0e990.jpg?auto=format&fit=crop&w=300&q=80" alt="Avatar thành viên 8">
+					</div>
+					<div class="member-name">33. NMP</div>
+				</article>
+
+				<!-- THÀNH VIÊN 9 -->
+				<!-- THAY LINK ẢNH AVATAR -->
+				<!-- THAY LINK ẢNH POPUP -->
+				<!-- THAY TÊN THÀNH VIÊN -->
+				<!-- THAY CHỨC VỤ -->
+				<!-- THAY SỞ THÍCH -->
+				<article class="member-card"
+					data-name="Thành viên 9"
+					data-role="Nguyễn Thị Phương Thảo"
+					data-hobby="Sở thích: ngắm thiên nhiên cỏ cây hoa lá, đạp xe tập thể dục, đi chơi du lịch, làm mình làm mẩy, thích cười chứ không thích khóc, thích hóng hớt drama "
+					data-popup="https://i.ibb.co/hR7SzbQ5/z7664927109576-5a2bad0d33e62114febef7272eb2a368.jpg?auto=format&fit=crop&w=1200&q=80"
+					tabindex="0"
+					role="button"
+					aria-label="Mở thông tin Thành viên 9">
+					<div class="avatar-wrap">
+						<img src="https://i.ibb.co/JR3cg5jR/z7668336966403-86c5a92ab3978d1ae1d5300150189177.jpg?auto=format&fit=crop&w=300&q=80" alt="Avatar thành viên 9">
+					</div>
+					<div class="member-name">40. NTPT</div>
+				</article>
+
+				<!-- THÀNH VIÊN 10 -->
+				<!-- THAY LINK ẢNH AVATAR -->
+				<!-- THAY LINK ẢNH POPUP -->
+				<!-- THAY TÊN THÀNH VIÊN -->
+				<!-- THAY CHỨC VỤ -->
+				<!-- THAY SỞ THÍCH -->
+				<article class="member-card"
+					data-name="Thành viên 10"
+					data-role="Chu Văn Thắng"
+					data-hobby="Sở thích: Thời trang, make-up"
+					data-popup="https://i.ibb.co/j9QGfv3F/z7668345489611-5d30c23dcc3baf1038a278361b2341bd.jpg?auto=format&fit=crop&w=1200&q=80"
+					tabindex="0"
+					role="button"
+					aria-label="Mở thông tin Thành viên 10">
+					<div class="avatar-wrap">
+						<img src="https://i.ibb.co/j9QGfv3F/z7668345489611-5d30c23dcc3baf1038a278361b2341bd.jpg?auto=format&fit=crop&w=300&q=80" alt="Avatar thành viên 10">
+					</div>
+					<div class="member-name">41. CVT</div>
+					</article>
+
+				<!-- THÀNH VIÊN 11 -->
+				<!-- THAY LINK ẢNH AVATAR -->
+				<!-- THAY LINK ẢNH POPUP -->
+				<!-- THAY TÊN THÀNH VIÊN -->
+				<!-- THAY CHỨC VỤ -->
+				<!-- THAY SỞ THÍCH -->
+				<article class="member-card"
+					data-name="Thành viên 11"
+					data-role="Nguyễn Phúc Thân"
+					data-hobby="Sở thích: Cắm trại, thiên nhiên"
+					data-popup="https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=1200&q=80"
+					tabindex="0"
+					role="button"
+					aria-label="Mở thông tin Thành viên 11">
+					<div class="avatar-wrap">
+						<img src="https://i.ibb.co/4nGKHFkJ/z7668343170879-011cdf29ea100d30dae13bfefc101cc6.jpg?auto=format&fit=crop&w=300&q=80" alt="Avatar thành viên 12">
+					</div>
+					<div class="member-name">42. NPT</div>
+				</article>
+				
+				
+				<!-- THÀNH VIÊN 12 -->
+				<!-- THAY LINK ẢNH AVATAR -->
+				<!-- THAY LINK ẢNH POPUP -->
+				<!-- THAY TÊN THÀNH VIÊN -->
+				<!-- THAY CHỨC VỤ -->
+				<!-- THAY SỞ THÍCH -->
+				<article class="member-card"
+					data-name="Thành viên 12"
+					data-role="Khuất Minh Tú"
+					data-hobby="Sở thích: Âm nhạc, đàn hát"
+					data-popup="https://i.ibb.co/B21yFVCB/z7668270595723-12b2f548816657afd535d6e4c76cec9e.jpg?auto=format&fit=crop&w=1200&q=80"
+					tabindex="0"
+					role="button"
+					aria-label="Mở thông tin Thành viên 11">
+					<div class="avatar-wrap">
+						<img src="https://i.ibb.co/B21yFVCB/z7668270595723-12b2f548816657afd535d6e4c76cec9e.jpg?auto=format&fit=crop&w=300&q=80" alt="Avatar thành viên 11">
+					</div>
+					<div class="member-name">46. KMT</div>
+				</article>
+			</div>
+		</section>
+
+		<!-- =========================================================
+		     PHẦN LIÊN HỆ
+		     ========================================================= -->
+		<section id="tab-contact" class="tab-content">
+			<h2 class="section-title">Liên hệ</h2>
+			<p class="section-desc">
+				Nếu bạn muốn liên hệ với nhóm, vui lòng để lại thông tin bên dưới. Chúng mình sẽ phản hồi sớm nhất có thể.
+			</p>
+
+			<div class="contact-wrap">
+				<div class="card-box">
+					<h3 style="margin:0 0 8px 0;">Thông tin</h3>
+					<p style="margin:0; color: var(--muted); line-height:1.7;">
+						Email: example@email.com<br>
+						Số điện thoại: 0123 456 789<br>
+						Địa chỉ: (Bạn có thể thay nội dung liên hệ tại đây)
+					</p>
+				</div>
+
+				<div class="card-box">
+					<h3 style="margin:0 0 12px 0;">Gửi tin nhắn</h3>
+
+					<form class="form" onsubmit="return false;">
+						<div>
+							<label for="fullName">Họ tên</label>
+							<input id="fullName" type="text" placeholder="Nhập họ tên..." />
+						</div>
+
+						<div>
+							<label for="email">Email</label>
+							<input id="email" type="email" placeholder="Nhập email..." />
+						</div>
+
+						<div>
+							<label for="message">Nội dung</label>
+							<textarea id="message" placeholder="Nhập nội dung..."></textarea>
+						</div>
+
+						<div class="btn-row">
+							<button class="btn btn-primary" type="button" id="fakeSendBtn">Gửi (demo)</button>
+
+							<!-- THAY LINK GOOGLE FORM TẠI ĐÂY -->
+							<a class="btn btn-outline" href="https://forms.gle/your-google-form-link" target="_blank" rel="noopener">
+								Mở Google Form
+							</a>
+						</div>
+
+						<p style="margin:8px 0 0; color: var(--muted); font-size: 13px; line-height:1.6;">
+							Lưu ý: Nút “Gửi (demo)” chỉ để minh họa giao diện. Nếu bạn muốn gửi thật, bạn có thể dùng Google Form ở nút bên cạnh.
+						</p>
+					</form>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="container">
+		© 2026 • Pastel Pink UI
+	</footer>
+
+	<!-- =========================================================
+	     POPUP (Modal)
+	     - JS sẽ đổ dữ liệu vào đây khi bạn bấm thẻ
+	     ========================================================= -->
+	<div class="modal" id="memberModal" aria-hidden="true">
+		<div class="modal-card" role="dialog" aria-modal="true" aria-label="Thông tin thành viên">
+			<button class="modal-close" id="modalCloseBtn" type="button" aria-label="Đóng">×</button>
+
+			<div class="modal-body">
+				<div class="modal-img">
+					<img id="modalImg" src="" alt="Ảnh popup thành viên" />
+				</div>
+
+				<div class="modal-info">
+					<h3 id="modalName">Tên thành viên</h3>
+					<p class="role" id="modalRole">Chức vụ</p>
+					<p class="hobby" id="modalHobby">Sở thích</p>
+
+					<div style="margin-top:10px; color: var(--muted); font-size: 13px; line-height: 1.6;">
+						Gợi ý: Bạn chỉ cần thay dữ liệu trong từng thẻ thành viên (link ảnh, tên, chức vụ, sở thích). Popup sẽ tự cập nhật theo.
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		/* =========================================================
+		   JS NHẸ:
+		   1) Tab menu: chỉ hiện đúng tab được chọn
+		   2) Popup: bấm thẻ -> mở modal + đổ dữ liệu
+		   ========================================================= */
+
+		// -------------------------------
+		// (1) TAB MENU
+		// -------------------------------
+		const tabButtons = document.querySelectorAll(".tab-btn");
+		const tabAbout = document.getElementById("tab-about");
+		const tabContact = document.getElementById("tab-contact");
+
+		function setActiveTab(tabName){
+			// Đổi trạng thái nút
+			tabButtons.forEach(btn => {
+				btn.classList.toggle("active", btn.dataset.tab === tabName);
+			});
+
+			// Ẩn/hiện nội dung tab
+			tabAbout.classList.toggle("active", tabName === "about");
+			tabContact.classList.toggle("active", tabName === "contact");
+
+			// (tuỳ chọn) Cuộn lên đầu khi đổi tab
+			window.scrollTo({ top: 0, behavior: "smooth" });
+		}
+
+		tabButtons.forEach(btn => {
+			btn.addEventListener("click", () => setActiveTab(btn.dataset.tab));
+		});
+
+		// -------------------------------
+		// (2) POPUP / MODAL
+		// -------------------------------
+		const modal = document.getElementById("memberModal");
+		const modalCloseBtn = document.getElementById("modalCloseBtn");
+
+		const modalImg = document.getElementById("modalImg");
+		const modalName = document.getElementById("modalName");
+		const modalRole = document.getElementById("modalRole");
+		const modalHobby = document.getElementById("modalHobby");
+
+		function openModal({ name, role, hobby, popup }){
+			modalImg.src = popup;
+			modalName.textContent = name;
+			modalRole.textContent = role;
+			modalHobby.textContent = hobby;
+
+			modal.classList.add("show");
+			modal.setAttribute("aria-hidden", "false");
+		}
+
+		function closeModal(){
+			modal.classList.remove("show");
+			modal.setAttribute("aria-hidden", "true");
+
+			// Xoá src để tránh tải ảnh không cần thiết khi đóng (tuỳ chọn)
+			modalImg.src = "";
+		}
+
+		// Bấm nút đóng
+		modalCloseBtn.addEventListener("click", closeModal);
+
+		// Bấm ra ngoài modal-card để đóng
+		modal.addEventListener("click", (e) => {
+			if(e.target === modal) closeModal();
+		});
+
+		// Bấm ESC để đóng
+		document.addEventListener("keydown", (e) => {
+			if(e.key === "Escape" && modal.classList.contains("show")) closeModal();
+		});
+
+		// Gắn sự kiện mở modal cho tất cả thẻ thành viên
+		const memberCards = document.querySelectorAll(".member-card");
+		memberCards.forEach(card => {
+			const handler = () => openModal({
+				name: card.dataset.name,
+				role: card.dataset.role,
+				hobby: card.dataset.hobby,
+				popup: card.dataset.popup
+			});
+
+			card.addEventListener("click", handler);
+
+			// Cho phép Enter/Space mở popup (hỗ trợ bàn phím)
+			card.addEventListener("keydown", (e) => {
+				if(e.key === "Enter" || e.key === " "){
+					e.preventDefault();
+					handler();
+				}
+			});
+		});
+
+		// -------------------------------
+		// (3) Nút "Gửi (demo)" trong Liên hệ
+		// - Chỉ demo: hiện alert để bạn biết JS đang hoạt động
+		// -------------------------------
+		document.getElementById("fakeSendBtn").addEventListener("click", () => {
+			alert("Đã bấm Gửi (demo). Nếu muốn gửi thật, hãy dùng Google Form ở nút bên cạnh.");
+		});
+	</script>
+</body>
+</html>
